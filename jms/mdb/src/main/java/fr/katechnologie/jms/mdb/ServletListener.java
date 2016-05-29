@@ -1,4 +1,4 @@
-package com.katechnologie.jms.mdb;
+package fr.katechnologie.jms.mdb;
 
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
@@ -13,7 +13,7 @@ import javax.jms.TextMessage;
  * A simple Message Driven Bean.
  * </p>
  */
-@MessageDriven( name = "test",
+@MessageDriven( name = "ServletListener",
         activationConfig = {
             @ActivationConfigProperty(
                     propertyName = "destinationLookup",
@@ -26,9 +26,9 @@ import javax.jms.TextMessage;
                     propertyValue = "Auto-acknowledge")
         }
 )
-public class MsgListener implements MessageListener {
+public class ServletListener implements MessageListener {
 
-    private final static Logger _logger = Logger.getLogger( MsgListener.class.toString() ) ;
+    private final static Logger _logger = Logger.getLogger( ServletListener.class.toString() ) ;
 
     /**
      * @see MessageListener#onMessage(Message)
@@ -41,10 +41,11 @@ public class MsgListener implements MessageListener {
                 textMessage = (TextMessage ) message;
                 _logger.info("Received Message from queue: " + textMessage.getText() );
             } else {
-                _logger.warning("Message of wrong type: " + Message.getClass().getName() );
+                _logger.warning("Message of wrong type: " + message.getClass().getName() );
             }
         } catch ( JMSException error ) {
-            throw error;
+            _logger.severe( "Message error: " + error.getMessage() );
         }
     }
+
 }

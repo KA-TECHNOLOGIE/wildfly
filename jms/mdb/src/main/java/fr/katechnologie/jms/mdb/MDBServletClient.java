@@ -1,4 +1,4 @@
-package com.katechnologie.jms.servlet;
+package fr.katechnologie.jms.mdb;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,18 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Definition of the two JMS destinations used by the quickstart
- * (one queue and one topic).
- */
-@JMSDestinationDefinitions(
-    value = {
-        @JMSDestinationDefinition(
-            name = "java:/jms/queue/servlet",
-            interfaceName = "javax.jms.Queue",
-            destinationName = "HelloWorldMDBQueue"
-        )
-    })
 /**
  * <p>
  * A simple servlet as client that sends several messages to a queue.
@@ -56,12 +44,11 @@ public class MDBServletClient extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        out.write("<h1>Quickstart: Example demonstrates the use of <strong>JMS 2.0</strong> and <strong>EJB 3.2 Message-Driven Bean</strong> in WildFly.</h1>");
+        out.write("<h1>Example demonstrates the use of <strong>JMS 2.0</strong> and <strong>EJB 3.2 Message-Driven Bean</strong> in WildFly.</h1>");
         try {
             boolean useTopic = req.getParameterMap().keySet().contains("topic");
-            final Destination destination = useTopic ? topic : queue;
 
-            out.write("<p>Sending messages to <em>" + destination + "</em></p>");
+            out.write("<p>Sending messages to <em>" + queue + "</em></p>");
             out.write("<h2>Following messages will be send to the destination:</h2>");
             for (int i = 0; i < MSG_COUNT; i++) {
                 String text = "This is message " + (i + 1);
