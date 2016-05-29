@@ -15,4 +15,8 @@
     <packaging>pom</packaging>
     <name>jms</name>
 
+    <modules>
+        <module>mdb</module>
+    </modules>
+
 </project>
