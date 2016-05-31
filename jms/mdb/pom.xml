@@ -105,7 +105,7 @@
                 <configuration>
                     <domain>
                         <server-groups>
-                            <server-group>main-server-group</server-group>
+                            <server-group>other-server-group</server-group>
                         </server-groups>
                     </domain>
                 </configuration>
