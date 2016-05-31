@@ -1,4 +1,4 @@
-package fr.katechnologie.jms.mdb;
+package fr.katechnologie.jms.client;
 
 import java.io.IOException;
 import java.io.PrintWriter;

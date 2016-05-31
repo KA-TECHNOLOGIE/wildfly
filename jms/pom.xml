@@ -17,6 +17,7 @@
 
     <modules>
         <module>mdb</module>
+        <module>client</module>
     </modules>
 
 </project>
