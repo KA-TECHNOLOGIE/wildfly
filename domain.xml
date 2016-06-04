@@ -611,6 +611,7 @@
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:messaging-activemq:1.0">
                 <server name="default">
+                    <security enabled="false"/>
                     <security-setting name="#">
                         <role name="guest" delete-non-durable-queue="true" create-non-durable-queue="true" consume="true" send="true"/>
                     </security-setting>
@@ -619,20 +620,36 @@
                     <http-connector name="http-connector-throughput" endpoint="http-acceptor-throughput" socket-binding="http">
                         <param name="batch-delay" value="50"/>
                     </http-connector>
+                    <http-connector name="bridge-connector" endpoint="bridge-acceptor" socket-binding="messaging-remote"/>
                     <in-vm-connector name="in-vm" server-id="0"/>
                     <http-acceptor name="http-acceptor" http-listener="default"/>
+                    <http-acceptor name="bridge-acceptor" http-listener="default"/>
                     <http-acceptor name="http-acceptor-throughput" http-listener="default">
                         <param name="batch-delay" value="50"/>
                         <param name="direct-deliver" value="false"/>
                     </http-acceptor>
                     <in-vm-acceptor name="in-vm" server-id="0"/>
+
+                    <bridge name="bridge-servlet" static-connectors="bridge-connector" use-duplicate-detection="false" forwarding-address="jms/queue/servlet" queue-name="servlet"/>
+
                     <jms-queue name="ExpiryQueue" entries="java:/jms/queue/ExpiryQueue"/>
                     <jms-queue name="DLQ" entries="java:/jms/queue/DLQ"/>
-                    <jms-queue name="ServletQueue" entries="java:/jms/queue/servlet java:jboss/exported/jms/queue/servlet"/>
+                    <jms-queue name="servlet" entries="java:/jms/queue/servlet java:jboss/exported/jms/queue/servlet"/>
                     <connection-factory name="InVmConnectionFactory" entries="java:/ConnectionFactory" connectors="in-vm"/>
                     <connection-factory name="RemoteConnectionFactory" entries="java:jboss/exported/jms/RemoteConnectionFactory" connectors="http-connector"/>
                     <pooled-connection-factory name="activemq-ra" transaction="xa" entries="java:/JmsXA java:jboss/DefaultJMSConnectionFactory" connectors="in-vm"/>
                 </server>
+
+                <jms-bridge name="bridge-servlet" max-batch-time="100" max-batch-size="10" max-retries="1" failure-retry-interval="10000" quality-of-service="AT_MOST_ONCE">
+                    <source destination="jms/queue/servlet" connection-factory="ConnectionFactory"/>
+                    <target password="jmsuser" user="jmsuser" destination="jms/queue/servlet" connection-factory="jms/RemoteConnectionFactory">
+                        <target-context>
+                            <property name="java.naming.factory.initial" value="org.jboss.naming.remote.client.InitialContextFactory"/>
+                            <property name="java.naming.provider.url" value="http-remoting://localhost:8180"/>
+                        </target-context>
+                    </target>
+                </jms-bridge>
+
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:naming:2.0">
                 <remote-naming/>
@@ -1129,6 +1146,9 @@
             <outbound-socket-binding name="mail-smtp">
                 <remote-destination host="localhost" port="25"/>
             </outbound-socket-binding>
+            <outbound-socket-binding name="messaging-remote">
+                <remote-destination host="localhost" port="8180"/>
+            </outbound-socket-binding>
         </socket-binding-group>
         <socket-binding-group name="ha-sockets" default-interface="public">
             <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
@@ -1145,6 +1165,9 @@
             <outbound-socket-binding name="mail-smtp">
                 <remote-destination host="localhost" port="25"/>
             </outbound-socket-binding>
+            <outbound-socket-binding name="messaging-remote">
+                <remote-destination host="localhost" port="8180"/>
+            </outbound-socket-binding>
         </socket-binding-group>
         <socket-binding-group name="full-sockets" default-interface="public">
             <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
@@ -1156,6 +1179,9 @@
             <socket-binding name="txn-status-manager" port="4713"/>
             <outbound-socket-binding name="mail-smtp">
                 <remote-destination host="localhost" port="25"/>
+            </outbound-socket-binding>
+            <outbound-socket-binding name="messaging-remote" source-port="0" fixed-source-port="false">
+                <remote-destination host="localhost" port="8180"/>
             </outbound-socket-binding>
         </socket-binding-group>
         <socket-binding-group name="full-ha-sockets" default-interface="public">
@@ -1175,15 +1201,18 @@
             <outbound-socket-binding name="mail-smtp">
                 <remote-destination host="localhost" port="25"/>
             </outbound-socket-binding>
+            <outbound-socket-binding name="messaging-remote">
+                <remote-destination host="localhost" port="8180"/>
+            </outbound-socket-binding>
         </socket-binding-group>
     </socket-binding-groups>
 
     <deployments>
         <deployment name="client.war" runtime-name="client.war">
-            <content sha1="af21e702f160d7ed4b67536cce92e0da3c2680b6"/>
+            <content sha1="85632263cff230bfe046e6bccf5d2283b394f00b"/>
         </deployment>
         <deployment name="mdb.war" runtime-name="mdb.war">
-            <content sha1="49d270aea3fa9876416771fbb4bfecc6e2d5d8ae"/>
+            <content sha1="eb5135c69ead10383caab845a0522cca3f855ad4"/>
         </deployment>
     </deployments>
 
@@ -1201,7 +1230,7 @@
             <jvm name="default">
                 <heap size="64m" max-size="512m"/>
             </jvm>
-            <socket-binding-group ref="full-ha-sockets"/>
+            <socket-binding-group ref="full-sockets" port-offset="100"/>
             <deployments>
                 <deployment name="mdb.war" runtime-name="mdb.war"/>
             </deployments>

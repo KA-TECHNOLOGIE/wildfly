@@ -16,8 +16,8 @@ import javax.jms.TextMessage;
 @MessageDriven( name = "ServletListener",
         activationConfig = {
             @ActivationConfigProperty(
-                    propertyName = "destinationLookup",
-                    propertyValue = "jms/queue/servlet"),
+                    propertyName = "destination",
+                    propertyValue = "servlet"),
             @ActivationConfigProperty(
                     propertyName = "destinationType",
                     propertyValue = "javax.jms.Queue"),

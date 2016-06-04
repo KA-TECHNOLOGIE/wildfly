@@ -24,6 +24,9 @@
                 <authorization>
                     <properties path="application-roles.properties" relative-to="jboss.domain.config.dir"/>
                 </authorization>
+                <server-identities>
+           	        <secret value="am1zdXNlcg==" />
+       		    </server-identities>
             </security-realm>
         </security-realms>
         <audit-log>
@@ -80,12 +83,11 @@
     </jvms>
 
     <servers>
-        <server name="server-one" group="main-server-group"/>
-        <server name="server-two" group="main-server-group" auto-start="true">
-            <socket-bindings port-offset="150"/>
+        <server name="server-one" group="main-server-group" auto-start="true">
+            <socket-bindings socket-binding-group="full-sockets" port-offset="0"/>
         </server>
-        <server name="server-three" group="other-server-group" auto-start="true">
-            <socket-bindings socket-binding-group="full-ha-sockets" port-offset="250"/>
+        <server name="server-two" group="other-server-group" auto-start="true">
+            <socket-bindings socket-binding-group="full-sockets" port-offset="100"/>
         </server>
 </servers>
     <profile>

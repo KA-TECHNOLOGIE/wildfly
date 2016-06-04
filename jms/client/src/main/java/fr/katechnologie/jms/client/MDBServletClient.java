@@ -37,7 +37,7 @@ public class MDBServletClient extends HttpServlet {
     @Inject
     private JMSContext context;
 
-    @Resource(lookup = "java:/jms/queue/servlet")
+    @Resource(lookup = "java:jboss/exported/jms/queue/servlet")
     private Queue queue;
 
     @Override
