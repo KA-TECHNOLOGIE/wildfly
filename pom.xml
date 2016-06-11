@@ -29,6 +29,8 @@
 
     <modules>
         <module>jms</module>
+        <module>jpa</module>
+        <module>scheduler</module>
     </modules>
 
     <dependencyManagement>

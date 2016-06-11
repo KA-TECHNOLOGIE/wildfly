@@ -1,4 +1,4 @@
-package fr.katechnologie.jpa;
+package fr.katechnologie.wildfly.scheduler.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  * @HttpServlet}.
  * </p>
  */
-@WebServlet("/mdbservlet")
-public class MDBServletClient extends HttpServlet {
+@WebServlet("/schedulerservlet")
+public class SchedulerServletClient extends HttpServlet {
 
     private static final long serialVersionUID = -8314035702649252239L;
 
@@ -32,9 +32,8 @@ public class MDBServletClient extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        out.write("<h1>Example demonstrates the use of <strong>JMS 2.0</strong> and <strong>EJB 3.2 Message-Driven Bean</strong> in WildFly.</h1>");
         try {
- 
+
         } finally {
             if (out != null) {
                 out.close();
