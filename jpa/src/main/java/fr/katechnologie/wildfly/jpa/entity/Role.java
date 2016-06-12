@@ -17,7 +17,7 @@ import javax.persistence.NamedQueries;
 @Entity
 @Table( name = "T_E_ROLE_ROL" )
 @NamedQueries( { 
-	@NamedQuery(name = "Role.findByuid", query = "SELECT p FROM Role p WHERE p.uid = :uid")
+	@NamedQuery(name = "Role.find", query = "SELECT p FROM Role p WHERE p.uid = :uid")
 } )
 public class Role implements Serializable
 {

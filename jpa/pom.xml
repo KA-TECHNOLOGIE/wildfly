@@ -30,20 +30,13 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Define the version of the JBoss Java EE APIs we want to use -->
-            <!-- JBoss distributes a complete set of Java EE APIs including a Bill
-                of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection)
-                of artifacts. We use this here so that we always get the correct versions
-                of artifacts. Here we use the jboss-javaee-7.0 stack (you can read this as
-                the JBoss stack of the Java EE APIs). You can actually use this stack with
-                any version of WildFly that implements Java EE.
             <dependency>
-                <groupId>org.jboss.spec</groupId>
-                <artifactId>jboss-javaee-8.0</artifactId>
-                <version>${version.jboss.spec.javaee.8.0}</version>
-                <type>pom</type>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.11.Final</version>
                 <scope>import</scope>
-            </dependency> -->
+                <type>pom</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -89,7 +82,41 @@
             <version>1.0.0.GA</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>1.2.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <version>2.0.0.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
+
 
     <build>
         <!-- Set the name of the WAR, used as the context root when the app is deployed -->
